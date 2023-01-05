@@ -6,12 +6,14 @@ const io = require("socket.io")(httpServer, {
 });
 
 io.use((socket, next) => {
-  const username = socket.handshake.auth.username;
-  console.log(username)
+  const { username, x, y } = socket.handshake.auth;
   if (!username) {
     return next(new Error("invalid username"));
   }
   socket.username = username;
+  socket.x = x;
+  socket.y = y;
+  
   next();
 });
 
@@ -22,14 +24,19 @@ io.on("connection", (socket) => {
     users.push({
       userID: id,
       username: socket.username,
+      x: socket.x,
+      y: socket.y
     });
   }
+
   socket.emit("users", users);
 
   // notify existing users
   socket.broadcast.emit("user connected", {
     userID: socket.id,
     username: socket.username,
+    x: socket.x,
+    y: socket.y
   });
 
   // notify users upon disconnection

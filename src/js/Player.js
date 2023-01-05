@@ -22,13 +22,15 @@ export class Player {
         this.pixelY = this.game.cubeSize * this.y + this.frameSize;
         this.movingPixelsX = this.game.cubeSize * this.x + this.frameSize;
         this.movingPixelsY = this.game.cubeSize * this.y + this.frameSize;
+        this.playerCoins = 0;
 
-        this.playerName = name;
-        this.playerNameWidth = 0
+        this.playerDisplay = this.userNameDisplay()
+        this.playerName = name
     }
 
     update(input) {
         this.move(input)
+        this.checkCoinsCollision();
         if (this.pixelX < this.movingPixelsX) {
             this.pixelX += this.game.speed;
         } else if (this.pixelX > this.movingPixelsX) {
@@ -72,12 +74,25 @@ export class Player {
             this.y = coord;
         }
     }
+
+    checkCoinsCollision() {
+        this.game.coins.forEach((coin) => {
+            if (coin.x === this.x && coin.y === this.y) {
+                coin.markedForDelete = true;
+                this.playerCoins += 1;
+            }
+        })
+    }
+    userNameDisplay() {
+        const div = document.createElement('div')
+        div.className = 'player_display';
+        document.body.append(div)
+        return div;
+    }
     draw(context) {
-        if (!this.playerNameWidth) {
-            this.playerNameWidth = context.measureText(this.playerName).width
-        }
-        context.fillText(this.playerName, this.pixelX - this.playerNameWidth * 0.5, this.pixelY)
+        this.playerDisplay.innerHTML = `<div><span>${this.playerName}: </span><span class="player_coin">${this.playerCoins}</span></div>`
+        this.playerDisplay.style.transform = `translate(${this.pixelX}px, ${this.pixelY}px)`
+        context.drawImage(this.shadowImage, this.pixelX, this.pixelY + 2);
         context.drawImage(this.image, this.frameX, this.frameY, this.frameSize, this.frameSize, this.pixelX, this.pixelY, this.frameSize, this.frameSize);
-        context.drawImage(this.shadowImage, this.pixelX, this.pixelY + 10);
     }
 }

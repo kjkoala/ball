@@ -1,16 +1,22 @@
 * {
     padding: 0;
     margin: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 html {
     height: 100vh;
     display: flex;
+    pointer-events: none;
 }
 
 body {
     margin: auto;
     position: relative;
+    width: 240px;
+    height: 208px;
+    transform: scale(3);
+    background-color: #73be82;
 }
 
 canvas {
@@ -19,17 +25,23 @@ canvas {
     background-size: 100%;
     width: 240px;
     height: 208px;
-    transform: scale(3);
     image-rendering: pixelated;
 }
 
-.username {
+.player_display {
     position: absolute;
-    padding: 10px;
-    background-color: rgba(0,0,0,0.3);
-    font-size: 14px;
-    top: 0;
-    left: 0;
-    border-radius: 10px;
+    top: -12px;
+    left: -5px;
+    font-size: 4px;
+    padding: 1px 2px 1px;
+    border-radius: 3px;
+    background: #333;
     color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.player_coin {
+    margin-left: 1px;
+    color: gold;
 }
