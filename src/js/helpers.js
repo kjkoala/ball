@@ -1,4 +1,4 @@
-import { mapData } from "./mapData";
+import { mapData } from "./mapData.js";
 
 export const randomCoords = () => {
     const coord = {

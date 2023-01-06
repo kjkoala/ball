@@ -1,10 +1,10 @@
 import Characters from '../assets/characters.png';
 import PlayerShadow from '../assets/shadow.png';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from './constants';
-import { mapData } from './mapData';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from './constants.js';
+import { mapData } from './mapData.js';
 
 export class Player {
-    constructor(game, name) {
+    constructor(game, name, x, y) {
         this.game = game;
 
         this.image = new Image();
@@ -16,8 +16,8 @@ export class Player {
         this.frameSize = 16;
         this.frameX = 0;
         this.frameY = 0;
-        this.x = mapData.minX + 2;
-        this.y = mapData.minY;
+        this.x = x;
+        this.y = y;
         this.pixelX = this.game.cubeSize * this.x + this.frameSize;
         this.pixelY = this.game.cubeSize * this.y + this.frameSize;
         this.movingPixelsX = this.game.cubeSize * this.x + this.frameSize;

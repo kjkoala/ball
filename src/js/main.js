@@ -1,31 +1,31 @@
 import '../css/main.css'
-import { Coin } from './Coin';
-import { InputHandler } from './input';
-import { Player } from './Player';
-import { randomCoords } from './helpers';
-import { socket } from './server/socket';
-import { mapData } from './mapData';
+import { Coin } from './Coin.js';
+import { InputHandler } from './input.js';
+import { Player } from './Player.js';
+import { randomCoords } from './helpers.js';
+import { socket } from './server/socket.js';
 
 const username = prompt('Enter Username')
 
-// if (username) {
-    socket.auth = { username, x: mapData.minX, y: mapData.minY }
+if (username) {
+    const { x, y } = randomCoords()
+    socket.auth = { username, x, y }
     socket.connect()
 
-    // socket.on("users", (users) => {
-    //     console.log('users', users)
-    // })
+    socket.on("users", (users) => {
+        console.log('users', users)
+    })
     
-    // socket.on("user connected", (user) => {
-    //     console.log('user', user)
-    // })
+    socket.on("user connected", (user) => {
+        console.log('user', user)
+    })
     
-//     socket.on("user disconnected", (userID) => {
-//         console.log('userID', userID)
-//     })
+    socket.on("user disconnected", (userID) => {
+        console.log('userID', userID)
+    })
 
-//     socket.emit()
-// }
+    socket.emit()
+}
 
 
 const canvas = document.createElement('canvas');
@@ -49,25 +49,23 @@ class Game {
         this.cubeSize = 16;
 
         this.keys = new InputHandler();
-        // this.player = new Player(this, 'Джордж');
         this.players = new Set();
         this.coins = new Set();
         this.coinSpawnTime = 500;
         this.coinSpawinInterval = 0;
     }
 
-    addPlayer(name) {
-        this.players.add(new Player(this, name))
+    addPlayer(user) {
+        this.players.add(new Player(this, user.username, user.x, user.y))
     }
     addPlayers (users) {
         users.forEach(user => {
-            this.players.add(new Player(this, user.username))
+            this.players.add(new Player(this, user.username, user.x, user.y))
         })
     }
 
     update(deltaTime) {
         this.players.forEach(player => player.update(this.keys))
-        // this.player.update(this.keys)
         this.coins.forEach(coin => {
             if (coin.markedForDelete) {
                 this.coins.delete(coin)
@@ -86,7 +84,6 @@ class Game {
     draw(context) {
         this.coins.forEach(coin => coin.draw(context))
         this.players.forEach(player => player.draw(context))
-        // this.player.draw(context)
     }
 }
 
@@ -94,11 +91,15 @@ const game = new Game(240, 208);
 let lastTime = 0;
 
 socket.on("user connected", (user) => {
-    game.addPlayer(user.username)
+    game.addPlayer(user)
 })
 
 socket.on("users", (users) => {
     game.addPlayers(users);
+})
+
+socket.on('coin add', (asd) => {
+    console.log('coin add', asd)
 })
 
 ;(function animate(timeStamp) {

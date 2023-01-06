@@ -1,5 +1,10 @@
-const httpServer = require("http").createServer();
-const io = require("socket.io")(httpServer, {
+import Http from "http"
+import { Server } from "socket.io";
+import { randomCoords } from '../helpers.js';
+const httpServer = Http.createServer();
+
+
+const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
   },
