@@ -40,6 +40,6 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ../var/www/nodejs
-            git checkout .
-            git pull
+            git checkout main
+            git pull origin main
             npm run build
