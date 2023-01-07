@@ -4,7 +4,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack serve --mode development",
-    "dev_server": "nodemon --ignore ./src/webpack.config.js ./src/js/server/main.js"
+    "dev_server": "nodemon --ignore ./src/webpack.config.cjs ./src/js/server/main.js"
   },
   "keywords": [],
   "author": "",

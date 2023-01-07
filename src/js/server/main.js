@@ -3,7 +3,6 @@ import { Server } from "socket.io";
 import { randomCoords } from '../helpers.js';
 const httpServer = Http.createServer();
 
-
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
@@ -22,19 +21,32 @@ io.use((socket, next) => {
   next();
 });
 
+
 io.on("connection", (socket) => {
-  // fetch existing users
   const users = [];
-  for (let [id, socket] of io.of("/").sockets) {
-    users.push({
-      userID: id,
-      username: socket.username,
-      x: socket.x,
-      y: socket.y
-    });
+    
+  // fetch existing users
+  for (let [id, s] of io.of("/").sockets) {
+    if (socket.id !== id) {
+      users.push({
+        userID: id,
+        username: s.username,
+        x: s.x,
+        y: s.y
+      });
+    }
   }
 
   socket.emit("users", users);
+
+  socket.on('move', (move) => {
+    socket.broadcast.emit('usermove', {
+      userID: socket.id,
+      x: socket.x,
+      y: socket.y,
+      move,
+    })
+  })
 
   // notify existing users
   socket.broadcast.emit("user connected", {

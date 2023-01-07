@@ -4,8 +4,9 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from './constants.js';
 import { mapData } from './mapData.js';
 
 export class Player {
-    constructor(game, name, x, y) {
+    constructor(game, name, x, y, userID, skin) {
         this.game = game;
+        this.userID = userID;
 
         this.image = new Image();
         this.image.src = Characters;
@@ -14,8 +15,8 @@ export class Player {
         this.shadowImage.src = PlayerShadow;
 
         this.frameSize = 16;
-        this.frameX = 0;
-        this.frameY = 0;
+        this.frameX = 16 * skin;
+        this.frameY = 16 * skin;
         this.x = x;
         this.y = y;
         this.pixelX = this.game.cubeSize * this.x + this.frameSize;
@@ -29,7 +30,7 @@ export class Player {
     }
 
     update(input) {
-        this.move(input)
+        input && this.move(input)
         this.checkCoinsCollision();
         if (this.pixelX < this.movingPixelsX) {
             this.pixelX += this.game.speed;
@@ -88,6 +89,9 @@ export class Player {
         div.className = 'player_display';
         document.body.append(div)
         return div;
+    }
+    delete() {
+        this.playerDisplay.remove()
     }
     draw(context) {
         this.playerDisplay.innerHTML = `<div><span>${this.playerName}: </span><span class="player_coin">${this.playerCoins}</span></div>`

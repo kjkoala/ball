@@ -8,6 +8,7 @@ html {
     height: 100vh;
     display: flex;
     pointer-events: none;
+    overflow: hidden;
 }
 
 body {
