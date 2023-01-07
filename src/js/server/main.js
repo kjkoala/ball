@@ -12,7 +12,8 @@ const app = express();
 if (env.PROD) {
   // const __filename = fileURLToPath(import.meta.url);
   // const __dirname = path.dirname(__filename);
-  use.app(express.static('dist'));
+  
+  app.use(express.static('dist'));
 }
 
 const server = Http.createServer(app);
