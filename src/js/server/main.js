@@ -56,12 +56,21 @@ io.on("connection", (socket) => {
 
   socket.emit("users", users);
 
-  socket.on('move', (move) => {
+  socket.on('keypress', ({key, x, y}) => {
     socket.broadcast.emit('usermove', {
       userID: socket.id,
-      x: socket.x,
-      y: socket.y,
-      move,
+      x,
+      y,
+      key,
+    })
+  })
+
+  socket.on('keyup', ({key, x, y}) => {
+    socket.broadcast.emit('userkeyup', {
+      userID: socket.id,
+      x,
+      y,
+      key,
     })
   })
 

@@ -51,10 +51,10 @@ class Game {
         this.player = new Player(this, user.username, user.x, user.y, user.userID, 0)
     }
 
-    userMove(user) {
+    userMove(keyStatus, user) {
         this.players.forEach(u => {
             if (u.userID === user.userID) {
-                u.move({ keys: new Set([user.move]) })
+                u.moveOtherPlayer(keyStatus, user)
             }
         })
     }
@@ -62,11 +62,13 @@ class Game {
     addPlayer(user) {
         this.players.add(new Player(this, user.username, user.x, user.y, user.userID, 1))
     }
+
     addPlayers (users) {
         users.forEach(user => {
             this.players.add(new Player(this, user.username, user.x, user.y, user.userID, 1))
         })
     }
+
     disconnectPlayer(userId) {
         this.players.forEach((user) => {
             if (user.userID === userId) {
@@ -120,7 +122,9 @@ socket.on("users", (users) => {
     })
 });
 
-socket.on('usermove', game.userMove.bind(game))
+socket.on('usermove', game.userMove.bind(game, 'keypress'))
+
+socket.on('userkeyup', game.userMove.bind(game, 'keyup'))
 
 
 socket.on('coin add', game.addCoin.bind(game));

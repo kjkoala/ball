@@ -15,7 +15,7 @@ export class Player {
         this.shadowImage.src = PlayerShadow;
 
         this.frameSize = 16;
-        this.frameX = 16 * skin;
+        this.frameX = 16;
         this.frameY = 16 * skin;
         this.x = x;
         this.y = y;
@@ -26,12 +26,17 @@ export class Player {
         this.playerCoins = 0;
 
         this.playerDisplay = this.userNameDisplay()
-        this.playerName = name
+        this.playerName = name;
+
+        this.serverPlayerKey = {
+            keys: new Set()
+        }
     }
 
     update(input) {
         input && this.move(input)
-        this.checkCoinsCollision();
+        this.moveOtherPlayer();
+        // this.checkCoinsCollision();
         if (this.pixelX < this.movingPixelsX) {
             this.pixelX += this.game.speed;
         } else if (this.pixelX > this.movingPixelsX) {
@@ -43,6 +48,17 @@ export class Player {
         } else if (this.pixelY > this.movingPixelsY) {
             this.pixelY -= this.game.speed;
         }
+    }
+
+    moveOtherPlayer(keyStatus, user) {
+        if (keyStatus === 'keypress') {
+            this.x = user.x;
+            this.y = user.y;
+            this.serverPlayerKey.keys.add(user.key)
+        } else if (keyStatus === 'keyup') {
+            this.serverPlayerKey.keys.delete(user.key)
+        }
+        this.move(this.serverPlayerKey)
     }
 
     move(input) {
