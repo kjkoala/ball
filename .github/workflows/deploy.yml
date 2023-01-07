@@ -42,4 +42,5 @@ jobs:
             cd ../var/www/nodejs
             git checkout main
             git pull origin main
+            npm ci
             npm run build
