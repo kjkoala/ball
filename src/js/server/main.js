@@ -14,6 +14,11 @@ if (env.PROD) {
   // const __dirname = path.dirname(__filename);
   
   app.use(express.static('dist'));
+
+  app.get('/', (req, res) => {
+    res.sendFile(path.join('index.html'));
+  });
+  
 }
 
 const server = Http.createServer(app);
@@ -21,10 +26,6 @@ const io = new Server(server, {
   cors: {
     origin: env.WS,
   },
-});
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 io.use((socket, next) => {
