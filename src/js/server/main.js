@@ -16,7 +16,7 @@ if (env.PROD) {
   app.use(express.static('dist'));
 
   app.get('/', (req, res) => {
-    res.sendFile(path.join('index.html'));
+    res.sendFile(path.join('/var/www/nodejs/dist/index.html'));
   });
   
 }
@@ -24,7 +24,7 @@ if (env.PROD) {
 const server = Http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: env.WS,
+    origin: 'https://diglav.ru',
   },
 });
 
