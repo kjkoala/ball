@@ -2,20 +2,23 @@ import Http from "http"
 import { Server } from "socket.io";
 import { randomCoords } from '../helpers.js';
 import express from "express";
-import path from 'path'
-// const httpServer = Http.createServer();
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// const io = new Server(httpServer, {
-//   cors: {
-//     origin: "http://localhost:443",
-//   },
-// });
+import env from '../../../env.json' assert { type: 'json' };
 
 const app = express();
+
+if (env.PROD) {
+  // const __filename = fileURLToPath(import.meta.url);
+  // const __dirname = path.dirname(__filename);
+  use.app(express.static('dist'));
+}
+
 const server = Http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:443",
+    origin: env.WS,
   },
 });
 
@@ -76,8 +79,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// const PORT = process.env.PORT || 8000;
-const PORT = 8000;
+const PORT = env.PORT || 8000;
 server.listen(PORT, () =>
   console.log(`server listening at http://localhost:${PORT}`)
 );

@@ -12,8 +12,6 @@ if (username) {
     socket.auth = { username, x, y }
     socket.connect()
 
-    console.log(socket)
-    
     socket.on("user disconnected", (userID) => {
         console.log('userID', userID)
     })
