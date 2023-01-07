@@ -1,12 +1,26 @@
 import Http from "http"
 import { Server } from "socket.io";
 import { randomCoords } from '../helpers.js';
-const httpServer = Http.createServer();
+import express from "express";
+import path from 'path'
+// const httpServer = Http.createServer();
 
-const io = new Server(httpServer, {
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: "http://localhost:443",
+//   },
+// });
+
+const app = express();
+const server = Http.createServer(app);
+const io = new Server(server, {
   cors: {
     origin: "http://localhost:443",
   },
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 io.use((socket, next) => {
@@ -64,6 +78,6 @@ io.on("connection", (socket) => {
 
 // const PORT = process.env.PORT || 8000;
 const PORT = 8000;
-httpServer.listen(PORT, () =>
+server.listen(PORT, () =>
   console.log(`server listening at http://localhost:${PORT}`)
 );
