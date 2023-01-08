@@ -56,6 +56,8 @@ export class Player {
             this.y = user.y;
             this.serverPlayerKey.keys.add(user.key)
         } else if (keyStatus === 'keyup') {
+            this.x = user.x;
+            this.y = user.y;
             this.serverPlayerKey.keys.delete(user.key)
         }
         this.move(this.serverPlayerKey)

@@ -11,10 +11,6 @@ if (username) {
     const { x, y } = randomCoords();
     socket.auth = { username, x, y }
     socket.connect()
-
-    socket.on("user disconnected", (userID) => {
-        console.log('userID', userID)
-    })
 }
 
 
@@ -78,8 +74,13 @@ class Game {
         } )
     }
 
-    addCoin({ x, y }) {
-        this.coins.add(new Coin(this, x, y))
+    addCoin(coins) {
+        console.log(coins)
+        if (Array.isArray(coins)) {
+            coins.forEach(coin => this.coins.add(new Coin(this, coin.x, coin.y)))
+        } else {
+            this.coins.add(new Coin(this, coins.x, coins.y))
+        }
     }
 
     update(deltaTime) {

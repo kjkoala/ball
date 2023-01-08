@@ -9,10 +9,9 @@ import env from '../../../env.json' assert { type: 'json' };
 
 const app = express();
 
+const coins = [];
+
 if (env.PROD) {
-  // const __filename = fileURLToPath(import.meta.url);
-  // const __dirname = path.dirname(__filename);
-  
   app.use(express.static('dist'));
 
   app.get('/', (req, res) => {
@@ -24,7 +23,7 @@ if (env.PROD) {
 const server = Http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://diglav.ru',
+    origin: 'http://localhost:3000',
   },
 });
 
@@ -56,10 +55,22 @@ io.on("connection", (socket) => {
     }
   }
 
+  // setInterval(() => {
+  //   if (coins.length < 50) {
+  //     const newCoin = randomCoords()
+  //     if (!coins.some((coin) => coin.x == newCoin.x && coin.y === newCoin.y)) {
+  //       coins.push(newCoin)
+  //       socket.volatile.emit('coin add', newCoin);
+  //     }
+  //   }
+  // }, 2000)
+
+  // socket.emit('coin add', coins);
+
   socket.emit("users", users);
 
-  socket.on('keypress', ({key, x, y}) => {
-    socket.broadcast.emit('usermove', {
+  socket.on('keypress', ({ key, x, y }) => {
+    socket.volatile.broadcast.emit('usermove', {
       userID: socket.id,
       x,
       y,
@@ -67,8 +78,8 @@ io.on("connection", (socket) => {
     })
   })
 
-  socket.on('keyup', ({key, x, y}) => {
-    socket.broadcast.emit('userkeyup', {
+  socket.on('keyup', ({ key, x, y }) => {
+    socket.volatile.broadcast.emit('userkeyup', {
       userID: socket.id,
       x,
       y,
