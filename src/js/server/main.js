@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import { randomCoords } from '../helpers.js';
 import express from "express";
 import path from 'path';
-import { fileURLToPath } from 'url';
+import apiRouter from './routes/api'
 
 import env from '../../../env.json' assert { type: 'json' };
 
@@ -19,6 +19,8 @@ if (env.PROD) {
   });
   
 }
+
+app.use('/api', apiRouter);
 
 const server = Http.createServer(app);
 const io = new Server(server, {
